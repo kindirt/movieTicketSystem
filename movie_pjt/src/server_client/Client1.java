@@ -8,8 +8,8 @@ public class Client1 {
 	public static void main(String[] args) {
 		try (Socket socket = new Socket("127.0.0.1",7777)){
 			
-			//�깒�뜑�� 由ъ떆踰� 留뚮뱾�븣 socket�쓣 �꽔�뼱二쇨퀬
-			System.out.println("�겢�씪�씠�뼵�듃 �떎�뻾");
+			//占쎄퉺占쎈쐭占쏙옙 �뵳�딅뻻甕곤옙 筌띾슢諭억옙釉� socket占쎌뱽 占쎄퐫占쎈선雅뚯눊��
+			System.out.println("占쎄깻占쎌뵬占쎌뵠占쎈섧占쎈뱜 占쎈뼄占쎈뻬");
 			ClientReceiver clientReceiver = new ClientReceiver(socket);
 			ClientSender clientSender = new ClientSender(socket);
 			
@@ -17,8 +17,8 @@ public class Client1 {
 			clientSender.start();
 			
 			clientSender.join();
-			System.out.println("�봽濡쒓렇�옩�씠 醫낅즺�맗�땲�떎.");
-			//�뒪�젅�뱶瑜� �떎�뻾 
+			System.out.println("占쎈늄嚥≪뮄�젃占쎌삪占쎌뵠 �넫�굝利븝옙留쀯옙�빍占쎈뼄.");
+			//占쎈뮞占쎌쟿占쎈굡�몴占� 占쎈뼄占쎈뻬 
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -30,4 +30,5 @@ public class Client1 {
 	}
 	
 	// Commit test!
+	// hello World! 한글 테스트
 }

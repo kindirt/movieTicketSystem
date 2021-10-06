@@ -26,4 +26,3 @@ public class ClientReceiver extends Thread {
 		}
 	}
 }
-ddd

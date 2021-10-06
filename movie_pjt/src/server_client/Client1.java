@@ -20,7 +20,6 @@ public class Client1 {
 			System.out.println("프로그램이 종료됩니다.");
 			//스레드를 실행 
 			
-			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -9,11 +9,11 @@ public class NameTest {
 		MovieDao dao = MovieDaoImpl.getInstance();
 		
 		try {
-			List<MovieDto> userList = new ArrayList<MovieDto>();
+			List<Customer> userList = new ArrayList<Customer>();
 			
 			userList = dao.userFindByName("아");
 			
-			for(MovieDto user : userList) {
+			for(Customer user : userList) {
 				System.out.println(user);
 			}
 			

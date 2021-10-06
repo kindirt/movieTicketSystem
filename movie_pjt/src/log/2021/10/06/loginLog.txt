@@ -1,0 +1,1 @@
+Customer [cu_id=3, user_id=tjoeun, user_pw=1234, name=조은, phone=010-2525-8282] 22시 58분 44초 Customer [cu_id=4, user_id=tjoeun2, user_pw=12345, name=조안, phone=010-6662-6277] 22시 58분 53초 Customer [cu_id=8, user_id=tjoeun3, user_pw=1234567, name=조흥, phone=010-2777-6657] 22시 59분 40초 Customer [cu_id=9, user_id=tjoeun4, user_pw=12345678, name=조흐잉, phone=010-2674-3456] 23시 00분 11초 

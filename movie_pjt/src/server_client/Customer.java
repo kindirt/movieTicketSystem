@@ -1,16 +1,16 @@
 package server_client;
 
-public class MovieDto {
+public class Customer {
 	
 	private int cu_id;
 	private String user_id;
 	private String user_pw;
 	private String name;
 	private String phone;
-	public MovieDto() {
+	public Customer() {
 		super();
 	}
-	public MovieDto(int cu_id, String user_id, String user_pw, String name, String phone) {
+	public Customer(int cu_id, String user_id, String user_pw, String name, String phone) {
 		super();
 		this.cu_id = cu_id;
 		this.user_id = user_id;
@@ -50,7 +50,8 @@ public class MovieDto {
 	}
 	@Override
 	public String toString() {
-		return "MovieDto [cu_id=" + cu_id + ", user_id=" + user_id + ", user_pw=" + user_pw + ", name=" + name
+		return "Customer [cu_id=" + cu_id + ", user_id=" + user_id + ", user_pw=" + user_pw + ", name=" + name
 				+ ", phone=" + phone + "]";
 	}
+	
 }

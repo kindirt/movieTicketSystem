@@ -8,8 +8,8 @@ public class Client1 {
 	public static void main(String[] args) {
 		try (Socket socket = new Socket("127.0.0.1",7777)){
 			
-			//占쎄퉺占쎈쐭占쏙옙 �뵳�딅뻻甕곤옙 筌띾슢諭억옙釉� socket占쎌뱽 占쎄퐫占쎈선雅뚯눊��
-			System.out.println("占쎄깻占쎌뵬占쎌뵠占쎈섧占쎈뱜 占쎈뼄占쎈뻬");
+			//샌더와 리시버 만들때 socket을 넣어주고
+			System.out.println("클라이언트 실행");
 			ClientReceiver clientReceiver = new ClientReceiver(socket);
 			ClientSender clientSender = new ClientSender(socket);
 			
@@ -17,8 +17,9 @@ public class Client1 {
 			clientSender.start();
 			
 			clientSender.join();
-			System.out.println("占쎈늄嚥≪뮄�젃占쎌삪占쎌뵠 �넫�굝利븝옙留쀯옙�빍占쎈뼄.");
-			//占쎈뮞占쎌쟿占쎈굡�몴占� 占쎈뼄占쎈뻬 
+			System.out.println("프로그램이 종료됩니다.");
+			//스레드를 실행 
+			
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -28,7 +29,4 @@ public class Client1 {
 			e.printStackTrace();
 		}
 	}
-	
-	// Commit test!
-	// hello World! 한글 테스트
 }

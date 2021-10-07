@@ -10,7 +10,6 @@ public class ServerMain {
 			
 			//서버 실행!
 			server.runServer();
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

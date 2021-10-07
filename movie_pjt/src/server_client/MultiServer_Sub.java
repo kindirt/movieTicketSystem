@@ -56,92 +56,141 @@ public class MultiServer_Sub {
 		@Override
 		public void run() {
 			//socket과 연결된 아이가 쓴 글을 읽을 수 있도록 기능을 구현한다.
-//			BufferedReader br = null;
 			System.out.println("--- 서버 스레드 실행 ---");
+			MovieDao dao = MovieDaoImpl.getInstance();
+			
 			try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))){
-			String an = "";
-				while(!an.equals("로그인성공")) {
 				
-					//접속시 초기 셋팅과 초기 알림
-					bw.write("아이디를 입력해주세요. \n");
+				String ticketComp ="";
+				while(!ticketComp.equals("예매성공")) {
+					String num = "";
+					String signUp = "";
+					String login = "";
+					bw.write("=====환영합니다=====\n");
+					bw.write("1.회원가입 2.로그인\n");
 					bw.flush();
+					num = br.readLine();
+					System.out.println(num);
 					
-					this.id = br.readLine();
-					System.out.println(id);
-					
-					bw.write("비밀번호를 입력해주세요.\n");
-					bw.flush();
-					
-					this.pw = br.readLine();
-					System.out.println(pw);
-					
-					bw.write("로그인 중...\n");
-					bw.flush();
-					
-					MovieDao dao = MovieDaoImpl.getInstance();
-					try {
-						List<MovieDto> userList = new ArrayList<MovieDto>();
-						
-						userList = dao.userFindByName(id);
-						for(MovieDto user : userList) {
-							if(id.equals(user.getUser_id())) {
-								an_id = user.getUser_id();
-							}
-							if(pw.equals(user.getUser_pw())) {
-								an_pw = user.getUser_pw();
-							}
-						}
-						if(id.equals(an_id)) {
-							if(pw.equals(an_pw)) {
-								bw.write("로그인 성공\n");
-								bw.flush();
-								an="로그인성공";
-								System.out.println(an_id+an);
-							} else {
-								bw.write("로그인 실패 비밀번호를 확인해주세요.\n");
-								bw.flush();
-							}
-						} else {
-							bw.write("로그인 실패 아이디를 확인해주세요.\n");
+					if(num.equals("1")) { //회원가입 기능
+						while(!signUp.equals("회원가입성공")) {
+							Customer customer = new Customer();
+							bw.write("=====회원가입을 진행하겠습니다.=====\n");
+							bw.write("아이디를 입력하세요.\n");
 							bw.flush();
+							String user_id = br.readLine();
+							System.out.println(user_id);
+							customer.setCu_id(0);
+							customer.setUser_id(user_id);
+							
+							bw.write("비밀번호를 입력하세요.\n");
+							bw.flush();
+							String user_pw = br.readLine();
+							System.out.println(user_pw);
+							customer.setUser_pw(user_pw);
+							
+							bw.write("이름을 입력해주세요.\n");
+							bw.flush();
+							String name = br.readLine();
+							System.out.println(name);
+							customer.setName(name);
+							
+							bw.write("전화번호를 입력해주세요.\n");
+							bw.flush();
+							String phone = br.readLine();
+							System.out.println(phone);
+							customer.setPhone(phone);
+							
+							try {
+								int rows = dao.userInsert(customer); // DB에 추가
+								if(rows > 0) {
+									System.out.println(rows + " 줄 추가완료");
+									bw.write("회원가입 성공!\n");
+									bw.flush();
+									
+									String logComp = dao.userSingUpLog(customer);
+									System.out.println(logComp);
+									
+									signUp = "회원가입성공";
+									System.out.println(user_id+signUp);
+								} else {
+									bw.write("회원가입 실패!\n");
+									bw.flush();
+								}
+							} catch (ClassNotFoundException e) {e.printStackTrace();} 
+							catch (SQLException e) {e.printStackTrace();}
+						} 
+					} 
+					if ((num.equals("2")) || (signUp.equals("회원가입성공"))) {
+						while(!login.equals("로그인성공")) { //로그인 기능.
+							bw.write("=====로그인을 진행하겠습니다.=====\n");
+							bw.write("아이디를 입력해주세요.\n");
+							bw.flush();
+							this.id = br.readLine();
+							System.out.println(this.id); //서버에 들어오는 값 확인 용
+							
+							bw.write("비밀번호를 입력해주세요.\n");
+							bw.flush();
+							this.pw = br.readLine();
+							System.out.println(this.pw);
+							
+							bw.write("로그인 중...\n");
+							bw.flush();
+							
+							try {
+								List<Customer> userList = new ArrayList<Customer>();
+								userList = dao.userFindByName(this.id);
+								int cu_id = 0;
+								String user_name = "";
+								String user_phone = "";
+								for(Customer user : userList) { //DB에 있는 id와 pw를 DB에서 가져오기
+									if(this.id.equals(user.getUser_id()) && this.pw.equals(user.getUser_pw())) {
+										cu_id = user.getCu_id();
+										this.an_id = user.getUser_id();
+										this.an_pw = user.getUser_pw();
+										user_name = user.getName();
+										user_phone = user.getPhone();
+									}
+								}
+								
+								if(this.id.equals(this.an_id)) { //DB에서 가져온거 비교
+									if(this.pw.equals(this.an_pw)) {
+										bw.write("로그인 성공!\n");
+										bw.flush();
+										Customer customer = new Customer(cu_id, this.id, this.pw, user_name, user_phone);
+										
+										String logComp = dao.userLoginLog(customer);
+										System.out.println(logComp);
+										
+										login="로그인성공";
+										System.out.println(this.an_id+login);
+									} else {
+										bw.write("로그인 실패! 비밀번호를 확인해주세요.\n");
+										bw.flush();
+									}
+								} else {
+									bw.write("로그인 실패! 아이디를 확인해주세요.\n");
+									bw.flush();
+								}
+							} catch (ClassNotFoundException e) {e.printStackTrace();}
+							catch (SQLException e) {e.printStackTrace();}	
+						}// 로그인 기능 끝
+					} // 회원가입 or 로그인 끝
+					//예매 
+				
+				}//예매 끝
+				
+					//사용자가 입력했을 때 메시지를 보냄
+					String msg = null;
+					while(true) {
+						//연결되어 있는 사람의 메세지를 읽고
+						msg = br.readLine();
+						if(msg == null) {
+							break;
 						}
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}	
-				}
-				
-				//예매 
-				
-//				for(User user : userList) {
-//					
-//					if(this != user) {
-//						user.bw.write(id+"님 로그인에 성공하셨습니다.");
-//						user.bw.newLine();
-//						user.bw.flush();
-//					}
-//				}
-				
-				//사용자가 입력했을 때 메시지를 보낵
-				String msg = null;
-				while(true) {
-					//연결되어 있는 사람의 메세지를 읽고
-					msg = br.readLine();
-					if(msg == null) {
-						break;
 					}
-//					//모든 사람에게 뿌려준다
-////					for(User user : userList) {
-////						if(this != user) {//자기 자신이 아니라면!
-////							user.bw.write("["+id+"] : "+msg);
-////							user.bw.newLine();
-////							user.bw.flush();
-////						}
-////					}
-				}
 				
-			}catch (Exception e) {
+			} catch (Exception e) {
 				//예외가 발생했다면 해당되는 소켓과 연결이 끊긴것임..
 				userList.remove(this);
 				try {
@@ -150,9 +199,7 @@ public class MultiServer_Sub {
 						user.bw.newLine();
 						user.bw.flush();
 					}
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				} catch (IOException e1) {e1.printStackTrace();}
 			}
 		}
 	}
